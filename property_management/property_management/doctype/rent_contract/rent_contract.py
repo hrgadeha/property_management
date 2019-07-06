@@ -8,14 +8,18 @@ from frappe.model.document import Document
 from frappe.utils import getdate, formatdate, today, date_diff, nowdate
 from frappe import _, msgprint
 from frappe.model.naming import make_autoname
+from frappe.utils import money_in_words
 import erpnext
 
 class RentContract(Document):
 
 	def autoname(self):
 		self.name = make_autoname(self.property + '-RC.###')
-	
+
 	def validate(self):
+		self.deposit_amount_in_words = money_in_words(self.deposit_amount)
+		self.rent_amount_in_words = money_in_words(self.rent)
+		self.final_rent_amount_in_words = money_in_words(self.final_rent_amount)
 		if date_diff(self.contract_end_date, self.contract_start_date) < 0:
 			frappe.throw(_("Rent Start Date cannot be before Rent End Date"))
 

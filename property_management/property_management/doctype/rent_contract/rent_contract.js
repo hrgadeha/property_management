@@ -12,6 +12,7 @@ frappe.ui.form.on('Rent Contract', {
 		frm.add_fetch('tenant','mobile_number','mobile_number');
 		frm.add_fetch('tenant','civil_id','civil_id');
 		frm.add_fetch('tenant','occupation','occupation');
+		//frm.add_fetch('tenant','customer_name','tenant_name');
 		if (frm.doc.__islocal){
 			frm.set_value("date",frappe.datetime.get_today());
 
@@ -32,6 +33,7 @@ frappe.ui.form.on('Rent Contract', {
 		frm.set_value("rent", parseFloat(frm.doc.final_rent_amount)-parseFloat(frm.doc.discount));
 	},
 	tenant: function(frm) {
+		if(frm.doc.tenant){
 		frappe.call({
 				method: "property_management.property_management.doctype.process_rent.process_rent.get_customer_name",
 				args: {
@@ -43,6 +45,7 @@ frappe.ui.form.on('Rent Contract', {
 					}
 				}
 		})
+		}
 	},
 	contract_start_date: function(frm) {
 		frm.set_value("contract_end_date", frappe.datetime.add_days(frappe.datetime.add_months(frm.doc.contract_start_date, 60), -1))
@@ -63,3 +66,13 @@ cur_frm.cscript.cancel_contract= function(frm) {
 				}
 		})
 }
+
+frappe.ui.form.on("Rent Contract", "onload", function(frm) {
+    cur_frm.set_query("property", function() {
+        return {
+            "filters": [
+                ["Property", "building", "=", frm.doc.building]
+            ]
+        };
+    });
+});

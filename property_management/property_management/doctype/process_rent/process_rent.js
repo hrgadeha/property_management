@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Process Rent', {
-	onload: function(frm) {  
+	onload: function(frm) {
 		frappe.call({
 			method: "property_management.property_management.doctype.process_rent.process_rent.set_dates",
 			callback: function(r) {
@@ -10,7 +10,7 @@ frappe.ui.form.on('Process Rent', {
 				cur_frm.set_value("to_period", r.message[1]);
 			}
 		})
-		
+
 		frm.doc.building = '';
 		frm.doc.property = '';
 		frm.doc.tenant = '';
@@ -41,7 +41,7 @@ frappe.ui.form.on('Process Rent', {
 	}
 });
 
-cur_frm.cscript.display_activity_log = function(msg) {
+/*cur_frm.cscript.activity_log = function(msg) {
 	if(!cur_frm.ss_html)
 		cur_frm.ss_html = $a(cur_frm.fields_dict['activity_log'].wrapper,'div');
 	if(msg) {
@@ -50,13 +50,13 @@ cur_frm.cscript.display_activity_log = function(msg) {
 	} else {
 		cur_frm.ss_html.innerHTML = "";
 	}
-}
+}*/
 
 
 //Create salary slip
 //-----------------------
 cur_frm.cscript.create_rent_receipts = function(doc, cdt, cdn) {
-	cur_frm.cscript.display_activity_log("");
+//	cur_frm.cscript.activity_log("");
 	frappe.call({
 				method: "property_management.property_management.doctype.process_rent.process_rent.create_rent_receipts",
 				args: {
@@ -68,7 +68,8 @@ cur_frm.cscript.create_rent_receipts = function(doc, cdt, cdn) {
 				},
 				callback: function(r, rt) {
 					if(r.message) {
-						cur_frm.cscript.display_activity_log(r.message);
+					msgprint(r.message)
+						cur_frm.cscript.activity_log(r.message);
 					}
 				}
 	})
@@ -81,7 +82,7 @@ cur_frm.cscript.print_rent_receipts = function(doc, cdt, cdn) {
 					building:cur_frm.doc.building,
 					property_id:cur_frm.doc.property,
 					tenant:cur_frm.doc.tenant,
-					from_period: cur_frm.doc.from_period,
+					from_period:cur_frm.doc.from_period,
 					to_period:cur_frm.doc.to_period
 				},
 				callback: function(r, rt) {
@@ -97,5 +98,5 @@ cur_frm.cscript.print_rent_receipts = function(doc, cdt, cdn) {
 						}
 					}
 				}
-	})	
+	})
 }
