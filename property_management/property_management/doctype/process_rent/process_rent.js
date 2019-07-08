@@ -60,11 +60,11 @@ cur_frm.cscript.create_rent_receipts = function(doc, cdt, cdn) {
 	frappe.call({
 				method: "property_management.property_management.doctype.process_rent.process_rent.create_rent_receipts",
 				args: {
-					building:cur_frm.doc.building,
-					property_id:cur_frm.doc.property,
-					tenant:cur_frm.doc.tenant,
-					from_period: cur_frm.doc.from_period,
-					to_period:cur_frm.doc.to_period
+					building :cur_frm.doc.building,
+					property_id :cur_frm.doc.property,
+					tenant :cur_frm.doc.tenant,
+					from_period : cur_frm.doc.from_period,
+					to_period :cur_frm.doc.to_period
 				},
 				callback: function(r, rt) {
 					if(r.message) {
